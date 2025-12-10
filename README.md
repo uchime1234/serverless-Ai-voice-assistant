@@ -1,243 +1,282 @@
-# 🤖 Serverless AI Voice Assistant
+🤖 Serverless AI Voice Assistant
 
-A complete serverless AI voice assistant that processes voice commands, converts them to text, generates AI responses, and converts responses back to speech. Built with React/TypeScript frontend, Flask backend, and deployed on AWS Lambda using Terraform.
+A complete serverless AI voice assistant that processes voice commands, converts them to text, generates AI responses, and converts responses back to speech. Built with a React + TypeScript frontend, Flask backend, and deployed on AWS Lambda using Terraform.
 
 🌟 Features
+
 🎤 Voice Processing: Record and process voice commands
+
 🤖 AI Integration: OpenAI-powered intelligent responses
+
 🌤️ Weather Information: Real-time weather data integration
+
 🔊 Text-to-Speech: Convert AI responses to natural-sounding speech
+
 ☁️ Serverless Architecture: Fully serverless deployment on AWS
+
 🚀 Automated Deployment: Single-command deployment pipeline
+
 🌐 Web Interface: Modern React-based user interface
 
-📁 Project Structure
-text
+```
 serverless-AI-voice-assistant/
-├── 📁 ai_project/                 # Frontend React/Vite TypeScript application
-├── 📁 flask_file/                 # Backend Python/Flask application
-│   ├── 📁 ffmpeg/                 # FFmpeg binaries for audio processing
-│   ├── 📁 uploads/                # Voice samples and uploads directory
-│   ├── Assistant2.py              # Main Lambda function handler
-│   ├── buildlambda.ps1            # Lambda package builder script
-│   ├── requirements.txt           # Python dependencies
-│   └── response.wav               # Sample response file
-├── 📁 terraform/                  # Infrastructure as Code
-│   ├── main.tf                    # Main Terraform configuration
-│   └── variables.tf               # Terraform variables
-├── deploy.ps1                     # Main deployment script
-└── README.md                      # This file
-🚀 Quick Start
+├── ai_project/ # Frontend React/Vite TypeScript application
+├── flask_file/ # Backend Python/Flask application
+│ ├── ffmpeg/ # FFmpeg binaries for audio processing
+│ ├── uploads/ # Voice samples and uploads directory
+│ ├── Assistant2.py # Main Lambda function handler
+│ ├── buildlambda.ps1 # Lambda package builder script
+│ ├── requirements.txt # Python dependencies
+│ └── response.wav # Sample response file
+├── terraform/ # Infrastructure as Code
+│ ├── main.tf # Main Terraform configuration
+│ └── variables.tf # Terraform variables
+├── deploy.ps1 # Main deployment script
+└── README.md # This file
+```
 
-Prerequisites
 
-AWS Account with CLI configured
+✅ Prerequisites
+
+AWS account with CLI configured
+
 Node.js (v16+)
+
 Python (3.9+)
-Terraform (optional - included in deploy script)
+
+Terraform (optional — deploy script can handle it)
+
 OpenWeather API Key (get one from OpenWeatherMap)
 
-#Installation & Deployment
-
-Method 1: One-Click Deployment (Recommended)
-powershell
-
-### Set your OpenWeather API key as environment variable
+🚀 Installation & Deployment
+Method 1 — One-Click Deployment (recommended)
+# Set your OpenWeather API key as environment variable
 $env:WEATHER_API_KEY = "your_openweather_api_key_here"
 
-### Run the deployment script
+# Run the deployment script
 .\deploy.ps1
-Method 2: Step-by-Step Deployment
+
+Method 2 — Step-by-step Deployment
+
 Clone and prepare:
 
-bash
 git clone <your-repo-url>
 cd serverless-AI-voice-assistant
-Set environment variable:
 
-powershell
+
+Set environment variable (PowerShell):
+
 $env:WEATHER_API_KEY = "your_api_key_here"
-Run the deployment:
 
-powershell
+
+Run the deployment script:
+
 .\deploy.ps1
-What the Deployment Script Does
-The deploy.ps1 script automates the entire deployment process:
 
-✅ Prerequisites Check - Verifies AWS, Node.js, Python installations
-✅ AWS Authentication Check - Ensures you're logged into AWS CLI
-🏗️ Backend Build - Packages Python code with dependencies
-☁️ Infrastructure Deployment - Uses Terraform to create AWS resources
-⚛️ Frontend Build - Builds React app with API endpoint configured
-🌐 Frontend Deployment - Deploys to Netlify (or provides manual instructions)
+🔧 What the Deployment Script Does
+
+The deploy.ps1 script automates the deployment:
+
+✅ Prerequisites check (AWS, Node, Python)
+
+✅ AWS authentication check
+
+🏗️ Backend build (packages Python + dependencies)
+
+☁️ Infrastructure deployment (Terraform)
+
+⚛️ Frontend build (React with configured API endpoint)
+
+🌐 Frontend deployment (Netlify or manual instructions)
 
 🏗️ Architecture Details
 AWS Infrastructure (Terraform)
+
 The Terraform code in /terraform creates:
 
-1. S3 Bucket (lambda_bucket)
-Stores the Lambda deployment package
-Private bucket with proper ownership controls
+S3 Bucket (lambda_bucket) — stores Lambda deployment package (private).
 
-2. IAM Role & Policy (lambda_role)
-Execution role for Lambda function
-Permissions for CloudWatch logging and S3 access
+IAM Role & Policy (lambda_role) — execution role with CloudWatch & S3 access.
 
-3. Lambda Function (voice_assistant)
-Python 3.9 runtime with 1024MB memory
-60-second timeout for audio processing
-Environment variables for API keys
-Handler: Assistant2.lambda_handler
+Lambda Function (voice_assistant) — Python 3.9 runtime, 1024MB memory, 60s timeout. Handler: Assistant2.lambda_handler.
 
-4. API Gateway (voice_assistant_api)
-HTTP API with CORS enabled
-Automatic deployment
-Proxy integration with Lambda
+API Gateway (voice_assistant_api) — HTTP API with CORS + proxy integration to Lambda.
 
-6. Permissions
-API Gateway permission to invoke Lambda
-S3 object for Lambda code storage
+Permissions — API Gateway permission to invoke Lambda; S3 object for Lambda code.
 
-Backend(Python/Flask)
+Note: I fixed the numbering and made it sequential.
+
+🐍 Backend (Python / Flask)
+
 Located in /flask_file:
-Assistant2.py: Main Lambda handler with endpoints:
-/: Health check
-/process: Process voice commands
-/test-voice: Test voice functionality
 
-Audio Processing:
-Uses FFmpeg for audio conversion
-Supports multiple audio formats
-Text-to-speech and speech-to-text conversion
-Frontend (React/TypeScript)
+Assistant2.py: Main Lambda handler with endpoints:
+
+/ — Health check
+
+/process — Process voice commands
+
+/test-voice — Test voice functionality
+
+Audio processing uses FFmpeg (put binaries in /flask_file/ffmpeg/). Supports multiple audio formats and handles speech-to-text / text-to-speech.
+
+⚛️ Frontend (React / TypeScript)
 
 Located in /ai_project:
-Built with Vite + React + TypeScript
-Voice recording interface
-Real-time response display
-Audio playback controls
-Environment-based API configuration
 
+Built with Vite + React + TypeScript
+
+Voice recording interface, real-time response display, and audio playback controls
+
+Uses environment variables to configure the backend API URL
 
 🔧 Manual Deployment Steps
-If you prefer to deploy manually:
 
-1. Build Lambda Package
-powershell
+Run these if you prefer full manual control.
+
+Build Lambda package
+
 cd flask_file
 .\buildlambda.ps1
 cd ..
 
-3. Deploy Infrastructure
-powershell
+
+Deploy infrastructure
+
 cd terraform
 terraform init
 terraform apply -var="weather_api_key=YOUR_API_KEY"
 cd ..
 
-5. Build Frontend
-powershell
+
+Build Frontend
+
 cd ai_project
 npm install
 npm run build
 cd ..
 
-7. Deploy to Netlify
-Either use Netlify CLI: netlify deploy --prod --dir=dist
 
-Or drag the dist folder to Netlify dashboard
+Deploy to Netlify
+
+Use Netlify CLI:
+
+netlify deploy --prod --dir=dist
+
+
+OR upload the dist folder via the Netlify dashboard.
 
 📋 Environment Variables
 Variable	Description	Required
 WEATHER_API_KEY	OpenWeatherMap API key	Yes
-VITE_API_BASE_URL	Backend API URL	Auto-generated
+VITE_API_BASE_URL	Backend API URL (frontend)	Auto-generated / set in env
 🧪 Testing Your Deployment
-After deployment, test your API:
-
-bash
 # Test health check
 curl <your-api-gateway-url>
 
 # Example response
-{"message":"Voice Assistant Backend is running!"}
+# {"message":"Voice Assistant Backend is running!"}
+
 🔍 Troubleshooting
-Common Issues
+Common issues & fixes
+
 AWS Authentication Failed
 
-bash
 aws configure
 # Enter your AWS Access Key, Secret Key, and region
+
+
 FFmpeg Issues
 
-Ensure FFmpeg binaries are in /flask_file/ffmpeg/
-Verify execution permissions on FFmpeg files
+Ensure FFmpeg binaries exist in /flask_file/ffmpeg/ and have execution permission.
+
 Lambda Timeout
-Audio processing might exceed default timeout
-Increased to 60 seconds in configuration
+
+Audio processing may exceed default timeout. Set timeout to 60s or increase if needed.
+
 CORS Errors
-API Gateway CORS is configured
-Check frontend API URL configuration
+
+Confirm API Gateway CORS configuration and check VITE_API_BASE_URL in the frontend.
 
 Logs & Monitoring
-Lambda Logs: Check CloudWatch Logs in AWS Console
-API Gateway Logs: Enable access logging if needed
-Frontend Logs: Browser developer console
+
+Lambda logs: CloudWatch Logs
+
+API Gateway logs: enable access logging if necessary
+
+Frontend logs: browser dev tools
 
 📊 Cost Estimation
-This deployment uses AWS Free Tier eligible services:
 
-AWS Lambda: 1M free requests/month
-API Gateway: 1M free API calls/month
-S3: First 5GB free
-CloudWatch: Basic monitoring free
-Estimated monthly cost for moderate usage: < $5
+This deployment uses AWS Free Tier–eligible services:
+
+AWS Lambda: 1M free requests / month
+
+API Gateway: 1M free API calls / month
+
+S3: first 5GB free
+
+CloudWatch: basic monitoring free
+
+Estimated monthly cost for moderate usage: <$5 (estimate; actual varies by usage).
 
 🔄 Updating the Application
-Update Backend Code:
 
-powershell
+Update backend code
+
 cd flask_file
-# Make changes to Assistant2.py
+# make changes to Assistant2.py
 .\buildlambda.ps1
 cd ../terraform
 terraform apply
-Update Frontend:
 
-powershell
+
+Update frontend
+
 cd ai_project
-# Make changes
+# make changes
 npm run build
-# Redeploy to Netlify
+# redeploy to Netlify
+
 🗑️ Cleanup
+
 To remove all deployed resources:
 
-powershell
 cd terraform
 terraform destroy
 
 🤝 Contributing
-Fork the repository
+
+Fork the repo
+
 Create a feature branch
-Make your changes
-Test thoroughly
+
+Make changes & test thoroughly
 
 Submit a pull request
 
 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+MIT License — see LICENSE file for details.
 
 🙏 Acknowledgments
+
 OpenAI for AI capabilities
+
 AWS for serverless infrastructure
+
 OpenWeatherMap for weather data
+
 FFmpeg for audio processing
 
 📞 Support
-For issues, questions, or contributions:
+
+If you need help:
+
 Check the troubleshooting section
+
 Open a GitHub issue
+
 Review AWS documentation for specific services
 
-Happy Coding! 🚀
-Built with ❤️ using cutting-edge serverless technology
-
+Built with ❤️ using serverless technology — Happy coding! 🚀
